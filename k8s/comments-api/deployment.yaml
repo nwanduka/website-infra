@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: comments-api
-          image: ghcr.io/victorianduka/comments-api:latest
+          image: ghcr.io/nwanduka/comments-api:latest
           ports:
             - containerPort: 8000
           envFrom:
