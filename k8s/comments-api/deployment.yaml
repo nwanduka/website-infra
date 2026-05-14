@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-api
+  namespace: comments
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: comments-api
+  template:
+    metadata:
+      labels:
+        app: comments-api
+    spec:
+      containers:
+        - name: comments-api
+          image: ghcr.io/victorianduka/comments-api:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: comments-api-config
+            - secretRef:
+                name: comments-api-secret
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
